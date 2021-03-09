@@ -50,6 +50,13 @@ function queryInput(event){
     // saveCity(cityInput)
 }
 
+function queryInputBtn(){
+
+    var cityInput = document.querySelector(savedBtn).value
+    console.log(cityInput)
+    // apiSearch(cityInput)
+}
+
 function apiSearch(cityInput){
     var cityLookUp = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityInput + '&appid=0f9afbf13ed5dbd1109884bf6550b637'
     
@@ -82,9 +89,12 @@ function saveCity (cityInput){
     // this is going to about saving the city to the local storage
     // creating the btn with class of saved-city
     var cityInput = document.querySelector('#city-control').value
+    var savedCity = JSON.parse((localStorage.getItem('Saved Cities')))
 
     localStorage.getItem('Saved Cities')
     savedCities.push(cityInput)
+
+    console.log(savedCities)
     localStorage.setItem('Saved Cities', JSON.stringify(savedCities))
     readCity()
 }
@@ -92,30 +102,37 @@ function saveCity (cityInput){
 function readCity(){
     // this is going to have to be for a for each function
     searchHistory.innerHTML = " "
-    // var localStorage.getItem('Saved Cities')
     for (var i = 0; i < savedCities.length; i++){
         var btnName = savedCities[i]
         var button = document.createElement('button')
         button.classList.add('saved-btn')
+        button.setAttribute('id',i)
         searchHistory.appendChild(button) 
         button.innerHTML = btnName
-    }
-}    
+        }
+}
+    
 
 function freshLoad(){
-    var pleaseWork = localStorage.getItem('Saved Cities')
-    for (var i = 0; i < pleaseWork.length; i++){
-        var btnName = pleaseWork[i]
-        var button = document.createElement('button')
-        button.classList.add('saved-btn')
-        searchHistory.appendChild(button) 
-        button.innerHTML = btnName
+    var savedCity = JSON.parse((localStorage.getItem('Saved Cities')))
+    if (!savedCity){
+        return
+    }else{
+        for (var i = 0; i < savedCity.length; i++){
+            var btnName = savedCity[i]
+            var button = document.createElement('button')
+            // savedCities.push(savedCity)
+            button.classList.add('saved-btn')
+            searchHistory.appendChild(button) 
+            button.innerText = btnName
+            console.log(savedCities)
+        }
     }
     
 }
 
 init ()
 submitBtn.addEventListener('click', queryInput) 
-// savedBtn.addEventListener('click', queryInput) 
+// savedBtn.addEventListener('click', queryInputBtn) 
 
 // create an event listener for the btns that are coming from the search history
