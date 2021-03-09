@@ -103,11 +103,18 @@ function readCity(){
 }    
 
 function freshLoad(){
-    var startCities = localStorage.getItem('Saved Cities')
-    savedCities.push(startCities)
-    localStorage.setItem('Saved Cities', JSON.stringify(savedCities))
-    readCity()
+    var pleaseWork = localStorage.getItem('Saved Cities')
+    for (var i = 0; i < pleaseWork.length; i++){
+        var btnName = pleaseWork[i]
+        var button = document.createElement('button')
+        button.classList.add('saved-btn')
+        searchHistory.appendChild(button) 
+        button.innerHTML = btnName
+    }
+    
 }
+
+init ()
 submitBtn.addEventListener('click', queryInput) 
 // savedBtn.addEventListener('click', queryInput) 
 
