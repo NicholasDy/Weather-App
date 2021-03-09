@@ -17,11 +17,29 @@
 // taking the data from the api and then applying it to the new cards
     // append the cards to the box 
 
+// icon for the sun 
+/* <i class="far fa-sun"></i> */
+// <i class="fas fa-cloud-sun"></i>
+/* <i class="fas fa-wind"></i> */
+// <i class="fas fa-cloud-rain"></i>
+// <i class="fas fa-cloud-showers-heavy"></i>
+// <i class="fas fa-snowflake"></i>
+
+var searchHistory = document.querySelector('.search-history')
+
 var submitBtn = document.querySelector('.submit-btn')
+var savedBtn = document.querySelector('.saved-btn')
+
+var savedCities = []
+
+function init() {
+    freshLoad()
+}
 
 function queryInput(event){
     event.preventDefault();
 
+    // going to have to create an if else statment that takes either the btn or the input value
     var cityInput = document.querySelector('#city-control').value
     if (!cityInput){
         window.alert('Please put a city into the search bar')
@@ -34,8 +52,9 @@ function queryInput(event){
 
 function apiSearch(cityInput){
     var cityLookUp = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityInput + '&appid=0f9afbf13ed5dbd1109884bf6550b637'
-
+    
     console.log(cityLookUp)
+    console.log(cityInput)
 
     fetch(cityLookUp)
         .then(function (response) {
@@ -49,16 +68,47 @@ function apiSearch(cityInput){
         .then(function (cityInfo){
             console.log(cityInfo)
         })
+    
+    saveCity()
 }  
 
 // function readData
 
 // function to post the data to the sheet
 
-// function saveCity (cityInput){
+
+
+function saveCity (cityInput){
     // this is going to about saving the city to the local storage
     // creating the btn with class of saved-city
-// }
+    var cityInput = document.querySelector('#city-control').value
 
-submitBtn.addEventListener('click', queryInput)
+    localStorage.getItem('Saved Cities')
+    savedCities.push(cityInput)
+    localStorage.setItem('Saved Cities', JSON.stringify(savedCities))
+    readCity()
+}
+
+function readCity(){
+    // this is going to have to be for a for each function
+    searchHistory.innerHTML = " "
+    // var localStorage.getItem('Saved Cities')
+    for (var i = 0; i < savedCities.length; i++){
+        var btnName = savedCities[i]
+        var button = document.createElement('button')
+        button.classList.add('saved-btn')
+        searchHistory.appendChild(button) 
+        button.innerHTML = btnName
+    }
+}    
+
+function freshLoad(){
+    var startCities = localStorage.getItem('Saved Cities')
+    savedCities.push(startCities)
+    localStorage.setItem('Saved Cities', JSON.stringify(savedCities))
+    readCity()
+}
+submitBtn.addEventListener('click', queryInput) 
+// savedBtn.addEventListener('click', queryInput) 
+
 // create an event listener for the btns that are coming from the search history

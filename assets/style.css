@@ -7,3 +7,9 @@
 .city-forecast */
 
 /* .saved-city */
+
+.hide{
+    display:none;
+}
+
+/* creating classes for the different weather types */
