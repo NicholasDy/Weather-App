@@ -39,15 +39,13 @@ function init() {
 function queryInput(event){
     event.preventDefault();
 
-    // going to have to create an if else statment that takes either the btn or the input value
     var cityInput = document.querySelector('#city-control').value
     if (!cityInput){
         window.alert('Please put a city into the search bar')
         return;
     }
-
+    saveCity()
     apiSearch(cityInput)
-    // saveCity(cityInput)
 }
 
 function queryInputBtn(){
@@ -75,8 +73,6 @@ function apiSearch(cityInput){
         .then(function (cityInfo){
             console.log(cityInfo)
         })
-    
-    saveCity()
 }  
 
 // function readData
@@ -84,10 +80,7 @@ function apiSearch(cityInput){
 // function to post the data to the sheet
 
 
-
 function saveCity (cityInput){
-    // this is going to about saving the city to the local storage
-    // creating the btn with class of saved-city
     var cityInput = document.querySelector('#city-control').value
     var savedCity = JSON.parse((localStorage.getItem('Saved Cities')))
 
@@ -105,7 +98,6 @@ function saveCity (cityInput){
 }
 
 function readCity(){
-    // this is going to have to be for a for each function
     var newArray = JSON.parse((localStorage.getItem('Saved Cities')))
     searchHistory.innerHTML = " "
     for (var i = 0; i < newArray.length; i++){
@@ -115,9 +107,7 @@ function readCity(){
         searchHistory.appendChild(button) 
         button.innerHTML = btnName
         button.setAttribute('value',btnName)
-        button.onclick = queryInputBtn
         }
-    // savedBtn.addEventListener('click', queryInputBtn) 
 }
     
 
@@ -134,7 +124,6 @@ function freshLoad(){
             button.innerText = btnName
             console.log(savedCities)
             button.setAttribute('value',btnName)
-            button.onclick = queryInputBtn
         }
     }
     
@@ -142,10 +131,9 @@ function freshLoad(){
 
 init ()
 submitBtn.addEventListener('click', queryInput) 
-// document.addEventListener('click', function(e){
-//     if(e.target && e.target.classList== 'saved-btn'){
-        
-//     }
-// }) 
+document.addEventListener('click', function(e){
+    if(e.target && e.target.classList== 'saved-btn'){
+        queryInputBtn ()
+    }
+}) 
 
-// create an event listener for the btns that are coming from the search history
