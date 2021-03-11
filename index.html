@@ -13,7 +13,7 @@
     <header>
         <h1 class="text-center border-bottom border-dark p-4">Nick's Weather App</h1>
     </header>
-    <div class="content d-flex m-2">
+    <div class="content d-flex m-2" id="content">
         <div class="search-box border border-dark d-flex flex-column w-30">
             <div class="search-bar d-flex p-2">
                 <form class="w-100 mh-1">
@@ -31,71 +31,69 @@
         <div class="city-info border border-dark w-100">
             <!-- will need to add the hide class to this after the code has been finished on the javascript -->
             <div class="city-info">
-                <h2><span class="city-name"></span><span class="current-date"></span></h2>
+                <h2><span class="city-name"></span> - - <span class="current-date"></span></h2>
                 <ul>
-                    <p>Temperature: <span class="temp"></span></p>
-                    <p>Humidity: <span class="hum"></span></p>
-                    <p>Wind Speed: <span class="wind-speed"></span></p>
-                    <p>Uv Index: <span class="uv-index"></span></p>
+                    <p>Temperature: <span class="temp"></span>°F</p>
+                    <p>Humidity: <span class="hum"></span>%</p>
+                    <p>Wind Speed: <span class="wind-speed"></span> MPH</p>
+                    <p>UV Index: <span class="uv-index text-white"> </span></p>
                 </ul>
             </div>
             <h3 class="m-3">5-Day Forecast</h3>
             <div class="forecast-field d-flex justify-content-between p-2 ">
-                <div class="5-day-fore">
-                    <div class="card text-white bg-primary m-2">
-                        <div class="card-header">Date</div>
-                        <div class="card-body">
-                            <i class="far fa-2x"></i>
-                        <p class="card-text">Temperature</p>
-                        <p class="card-text">Humidity</p>
-                        </div>
-                    </div>            
-                </div>
-                <div class="5-day-fore">
-                    <div class="card text-white bg-primary m-2">
-                        <div class="card-header">Date</div>
-                        <div class="card-body">
-                            <i class="far fa-2x"></i>
-                        <p class="card-text">Temperature</p>
-                        <p class="card-text">Humidity</p>
-                        </div>
-                    </div>            
-                </div>
-                <div class="5-day-fore">
-                    <div class="card text-white bg-primary m-2">
-                        <div class="card-header">Date</div>
-                        <div class="card-body">
-                            <i class="far fa-2x"></i>
-                        <p class="card-text">Temperature</p>
-                        <p class="card-text">Humidity</p>
-                        </div>
-                    </div>            
-                </div>
-                <div class="5-day-fore">
-                    <div class="card text-white bg-primary m-2">
-                        <div class="card-header">Date</div>
-                        <div class="card-body">
-                            <i class="far fa-2x"></i>
-                        <p class="card-text">Temperature</p>
-                        <p class="card-text">Humidity</p>
-                        </div>
-                    </div>            
-                </div>
-                <div class="5-day-fore">
-                    <div class="card text-white bg-primary m-2">
-                        <div class="card-header">Date</div>
-                        <div class="card-body">
-                            <i class="far fa-2x"></i>
-                        <p class="card-text">Temperature</p>
-                        <p class="card-text">Humidity</p>
-                        </div>
-                    </div>            
-                </div>
+                
+                <div class="day-forecast card text-white bg-primary m-2" data-day ='0'>
+                    <div class="card-header">Date</div>
+                    <div class="card-body">
+                        <i class="far fa-2x"></i>
+                    <p class="card-text">Temperature</p>
+                    <p class="card-text">Humidity</p>
+                    </div>
+                </div>            
+            
+            
+                <div class="day-forecast card text-white bg-primary m-2" data-day ='1'>
+                    <div class="card-header">Date: <span class="day-input"></span></div>
+                    <div class="card-body">
+                        <i class="far fa-2x"></i>
+                    <p class="card-text">Temperature: <span class="day-temp"></span></p>
+                    <p class="card-text">Humidity: <span class="day-hum"></span></p>
+                    </div>
+                </div>            
+            
+    
+                <div class="day-forecast card text-white bg-primary m-2" data-day ='2'>
+                    <div class="card-header">Date</div>
+                    <div class="card-body">
+                        <i class="far fa-2x"></i>
+                    <p class="card-text">Temperature</p>
+                    <p class="card-text">Humidity</p>
+                    </div>
+                </div>            
+            
+                <div class="card text-white bg-primary m-2" data-day ='3'>
+                    <div class="card-header">Date</div>
+                    <div class="card-body">
+                        <i class="far fa-2x"></i>
+                    <p class="card-text">Temperature</p>
+                    <p class="card-text">Humidity</p>
+                    </div>
+                </div>            
+            
+                <div class="card text-white bg-primary m-2" data-day ='4'>
+                    <div class="card-header">Date</div>
+                    <div class="card-body">
+                        <i class="far fa-2x"></i>
+                    <p class="card-text">Temperature</p>
+                    <p class="card-text">Humidity</p>
+                    </div>
+                </div>            
+               
             </div>    
             
         </div>
     </div>
 </body>
-
+<script src="https://momentjs.com/downloads/moment.js"></script>
 <script src="./assets/script.js"></script>
 </html>

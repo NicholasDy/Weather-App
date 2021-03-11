@@ -26,6 +26,53 @@
 // <i class="fas fa-snowflake"></i>
 
 var searchHistory = document.querySelector('.search-history')
+var cityPrint = document.querySelector('.city-info')
+var cityNameEl = document.querySelector('.city-name')
+var dateEl = document.querySelector('.current-date')
+var tempEl = document.querySelector('.temp')
+var humEl = document.querySelector('.hum')
+var windEl = document.querySelector('.wind-speed')
+var uvEl = document.querySelector('.uv-index')
+var dataDay = document.querySelector('.day-forecast')
+
+
+// this is for the Current weather
+function printResultsCCurrent(cityInfoCurrent){
+    cityNameEl.textContent = cityInfoCurrent.name
+    dateEl.textContent = moment().format('MMMM Do YYYY');
+    tempEl.textContent = Math.ceil(cityInfoCurrent.main.temp)
+    humEl.textContent = cityInfoCurrent.main.humidity
+    windEl.textContent = cityInfoCurrent.wind.speed
+
+    // needed for the UV index
+    var latEl = cityInfoCurrent.coord.lat                  
+    var lonEl = cityInfoCurrent.coord.lon  
+    uvFetch(latEl, lonEl)
+
+    if (uvEl >= 11){
+        uvEl.style.backgroundColor = 'purple';
+    } else if (uvEl >= 8 ){
+        uvEl.style.backgroundColor = 'red';
+    } else if (uvEl >= 6 ){
+        uvEl.style.backgroundColor = 'orange';
+    }else if (uvEl >= 8 ){
+        uvEl.style.backgroundColor = 'yellow';
+    } else if (uvEl >= 8 ){
+        uvEl.style.backgroundColor = 'green';
+    } else {
+        uvEl.style.backgroundColor = 'black';
+    }
+}
+
+// function to post the data to the sheet
+// function printResults (cityInfo){
+    // div class="card-header">Date: <span class="day-input"></span></div>
+    // <div class="card-body">
+    //     <i class="far fa-2x"></i>
+    // <p class="card-text">Temperature: <span class="day-temp"></span></p>
+    // <p class="card-text">Humidity: <span class="day-hum"></span></p>
+
+// }
 
 var submitBtn = document.querySelector('.submit-btn')
 var savedBtn = document.querySelector('.saved-btn')
@@ -48,19 +95,19 @@ function queryInput(event){
     apiSearch(cityInput)
 }
 
-function queryInputBtn(){
+function queryInputBtn(e){ 
+    // this is giving the problem of grabbing the frist class with saved-btn and not the button selected
 
-    var cityInput = document.querySelector('.saved-btn').value
+    var cityInput = e.target.value
     
     apiSearch(cityInput)
+    apiSearchCurrent(cityInput)
 }
 
+// Fetch for all the forecast data
 function apiSearch(cityInput){
-    var cityLookUp = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityInput + '&appid=0f9afbf13ed5dbd1109884bf6550b637'
+    var cityLookUp = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityInput + '&units=imperial&appid=0f9afbf13ed5dbd1109884bf6550b637'
     
-    console.log(cityLookUp)
-    console.log(cityInput)
-
     fetch(cityLookUp)
         .then(function (response) {
             if (!response.ok){
@@ -72,14 +119,55 @@ function apiSearch(cityInput){
         })
         .then(function (cityInfo){
             console.log(cityInfo)
+            console.log(dataDay.dataset.day.length)
+            // a for loop for each of the cards 
+            for (var i = 0; i < cityInfo.list.length; i++){ 
+                printResults(cityInfo[i]);
+            }
         })
 }  
 
-// function readData
+// Fetch for the current data and for the Lat and Lon 
+function apiSearchCurrent(cityInput){
+    var cityLookUpCurrent = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityInput + '&units=imperial&appid=0f9afbf13ed5dbd1109884bf6550b637'
 
-// function to post the data to the sheet
+    fetch(cityLookUpCurrent)
+        .then(function (response) {
+            if (!response.ok){
+                window.alert('incorrect ID')
+                throw response.json();
+            }
+            
+            return response.json();
+        })
+        .then(function (cityInfoCurrent){
+            console.log(cityInfoCurrent)
+            printResultsCCurrent(cityInfoCurrent);              
+        })
 
+}  
 
+// Fetch for the UV index excluding the extra data to reduce load 
+function uvFetch (latEl, lonEl){
+    var cityLookUpUV = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + latEl + '&lon=' + lonEl +'&exclude=hourly,daily,alerts&appid=0f9afbf13ed5dbd1109884bf6550b637'
+
+    fetch(cityLookUpUV)
+    .then(function (response) {
+        if (!response.ok){
+            window.alert('incorrect ID')
+            throw response.json();
+        }
+     
+        return response.json();
+    })
+    .then(function (cityLookUpUV){
+        console.log(cityLookUpUV)
+        uvEl.textContent = cityLookUpUV.current.uvi         
+    })
+
+}
+
+// these are the functions used to help saved the data 
 function saveCity (cityInput){
     var cityInput = document.querySelector('#city-control').value
     var savedCity = JSON.parse((localStorage.getItem('Saved Cities')))
@@ -131,9 +219,11 @@ function freshLoad(){
 
 init ()
 submitBtn.addEventListener('click', queryInput) 
+// add a key down event for enter if the search bar is not empty 
+
 document.addEventListener('click', function(e){
     if(e.target && e.target.classList== 'saved-btn'){
-        queryInputBtn ()
+        queryInputBtn (e)
     }
 }) 
 
