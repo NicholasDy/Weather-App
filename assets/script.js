@@ -33,8 +33,17 @@ var tempEl = document.querySelector('.temp')
 var humEl = document.querySelector('.hum')
 var windEl = document.querySelector('.wind-speed')
 var uvEl = document.querySelector('.uv-index')
-var dataDay = document.querySelector('.day-forecast')
+var dataDay = $('.day-forecast')
 
+var submitBtn = document.querySelector('.submit-btn')
+var savedBtn = document.querySelector('.saved-btn')
+
+
+var savedCities = []
+
+function init() {
+    freshLoad()
+}
 
 // this is for the Current weather
 function printResultsCCurrent(cityInfoCurrent){
@@ -43,11 +52,11 @@ function printResultsCCurrent(cityInfoCurrent){
     tempEl.textContent = Math.ceil(cityInfoCurrent.main.temp)
     humEl.textContent = cityInfoCurrent.main.humidity
     windEl.textContent = cityInfoCurrent.wind.speed
-
+    console.log(cityInfoCurrent.main)
     // needed for the UV index
     var latEl = cityInfoCurrent.coord.lat                  
     var lonEl = cityInfoCurrent.coord.lon  
-    uvFetch(latEl, lonEl)
+    fetchForecastUV(latEl, lonEl)
 
     if (uvEl >= 11){
         uvEl.style.backgroundColor = 'purple';
@@ -64,23 +73,28 @@ function printResultsCCurrent(cityInfoCurrent){
     }
 }
 
-// function to post the data to the sheet
-// function printResults (cityInfo){
-    // div class="card-header">Date: <span class="day-input"></span></div>
-    // <div class="card-body">
-    //     <i class="far fa-2x"></i>
-    // <p class="card-text">Temperature: <span class="day-temp"></span></p>
-    // <p class="card-text">Humidity: <span class="day-hum"></span></p>
-
-// }
-
-var submitBtn = document.querySelector('.submit-btn')
-var savedBtn = document.querySelector('.saved-btn')
-
-var savedCities = []
-
-function init() {
-    freshLoad()
+function printResults (cityLookUpUV){
+//     <div class="day-forecast card text-white bg-primary m-2" data-day ='0'>
+    //     <div class="card-header">Date</div>
+    //     <div class="card-body">
+    //         <i class="far fa-2x"></i>
+    //         <p class="card-text">Temperature</p>
+    //         <p class="card-text">Humidity</p>
+    //     </div>
+//      </div>
+    
+    dataDay.each(function(){
+          var keyPair = $(this).data('day')
+          console.log(keyPair)
+          var valuePair = cityLookUpUV.daily[keyPair]
+          console.log(valuePair)
+          var dayTemp = $('.day-temp')
+          if (valuePair){
+              $(this).children(dayTemp).text(valuePair.temp.day)
+          }
+    })
+  
+    
 }
 
 function queryInput(event){
@@ -92,7 +106,8 @@ function queryInput(event){
         return;
     }
     saveCity()
-    apiSearch(cityInput)
+    // apiSearch(cityInput)
+    apiSearchCurrent(cityInput)
 }
 
 function queryInputBtn(e){ 
@@ -100,32 +115,11 @@ function queryInputBtn(e){
 
     var cityInput = e.target.value
     
-    apiSearch(cityInput)
+    // apiSearch(cityInput)
     apiSearchCurrent(cityInput)
 }
 
 // Fetch for all the forecast data
-function apiSearch(cityInput){
-    var cityLookUp = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityInput + '&units=imperial&appid=0f9afbf13ed5dbd1109884bf6550b637'
-    
-    fetch(cityLookUp)
-        .then(function (response) {
-            if (!response.ok){
-                window.alert('incorrect ID')
-                throw response.json();
-            }
-            
-            return response.json();
-        })
-        .then(function (cityInfo){
-            console.log(cityInfo)
-            console.log(dataDay.dataset.day.length)
-            // a for loop for each of the cards 
-            for (var i = 0; i < cityInfo.list.length; i++){ 
-                printResults(cityInfo[i]);
-            }
-        })
-}  
 
 // Fetch for the current data and for the Lat and Lon 
 function apiSearchCurrent(cityInput){
@@ -148,8 +142,8 @@ function apiSearchCurrent(cityInput){
 }  
 
 // Fetch for the UV index excluding the extra data to reduce load 
-function uvFetch (latEl, lonEl){
-    var cityLookUpUV = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + latEl + '&lon=' + lonEl +'&exclude=hourly,daily,alerts&appid=0f9afbf13ed5dbd1109884bf6550b637'
+function fetchForecastUV (latEl, lonEl){
+    var cityLookUpUV = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + latEl + '&lon=' + lonEl +'&exclude=hourly,alerts&units=imperial&appid=0f9afbf13ed5dbd1109884bf6550b637'
 
     fetch(cityLookUpUV)
     .then(function (response) {
@@ -162,9 +156,10 @@ function uvFetch (latEl, lonEl){
     })
     .then(function (cityLookUpUV){
         console.log(cityLookUpUV)
-        uvEl.textContent = cityLookUpUV.current.uvi         
-    })
-
+        uvEl.textContent = cityLookUpUV.current.uvi  
+        printResults(cityLookUpUV);
+        }
+    )
 }
 
 // these are the functions used to help saved the data 
