@@ -1,30 +1,3 @@
-// going to need a if statement that is going to change the colour based on the danger of the UV index
-
-// local storage that is going to keep the information ready for a later search
-    // each button is going to be for an array that can be kept for later 
-    // key value pair ("City", X)
-
-// two event listeners 
-    // one for the submit button to take the data and pass it along to the fetch 
-    // one for the recall from the localstorage
-
-// fetch to grab the infomation from the API 
-    // parameters for the api 
-    // one call API https://openweathermap.org/forecast5
-
-    // api key 0f9afbf13ed5dbd1109884bf6550b637
-
-// taking the data from the api and then applying it to the new cards
-    // append the cards to the box 
-
-// icon for the sun 
-/* <i class="far fa-sun"></i> */
-// <i class="fas fa-cloud-sun"></i>
-/* <i class="fas fa-wind"></i> */
-// <i class="fas fa-cloud-rain"></i>
-// <i class="fas fa-cloud-showers-heavy"></i>
-// <i class="fas fa-snowflake"></i>
-
 var searchHistory = document.querySelector('.search-history')
 var cityPrint = document.querySelector('.city-info')
 var cityNameEl = document.querySelector('.city-name')
@@ -34,6 +7,7 @@ var humEl = document.querySelector('.hum')
 var windEl = document.querySelector('.wind-speed')
 var uvEl = document.querySelector('.uv-index')
 var dataDay = $('.day-forecast')
+var currentIcon = document.querySelector('.current-icon')
 
 var submitBtn = document.querySelector('.submit-btn')
 var savedBtn = document.querySelector('.saved-btn')
@@ -47,50 +21,79 @@ function init() {
 
 // this is for the Current weather
 function printResultsCCurrent(cityInfoCurrent){
+    console.log(cityInfoCurrent)
     cityNameEl.textContent = cityInfoCurrent.name
     dateEl.textContent = moment().format('MMMM Do YYYY');
     tempEl.textContent = Math.ceil(cityInfoCurrent.main.temp)
     humEl.textContent = cityInfoCurrent.main.humidity
     windEl.textContent = cityInfoCurrent.wind.speed
-    console.log(cityInfoCurrent.main)
+    
     // needed for the UV index
     var latEl = cityInfoCurrent.coord.lat                  
     var lonEl = cityInfoCurrent.coord.lon  
     fetchForecastUV(latEl, lonEl)
 
-    if (uvEl >= 11){
-        uvEl.style.backgroundColor = 'purple';
-    } else if (uvEl >= 8 ){
-        uvEl.style.backgroundColor = 'red';
-    } else if (uvEl >= 6 ){
-        uvEl.style.backgroundColor = 'orange';
-    }else if (uvEl >= 8 ){
-        uvEl.style.backgroundColor = 'yellow';
-    } else if (uvEl >= 8 ){
-        uvEl.style.backgroundColor = 'green';
-    } else {
-        uvEl.style.backgroundColor = 'black';
-    }
+    // Icon logic 
+    var currentTime =  moment().unix()
+    var sunsetValue = cityInfoCurrent.sys.sunset
+    var sunset = moment(sunsetValue).unix()
+    if (currentTime > sunset){
+        currentIcon.classList.add('fa-moon')
+    } else if (cityInfoCurrent.weather[0].icon === '02d'){
+        currentIcon.classList.add('fa-cloud-sun')
+      } else if (cityInfoCurrent.weather[0].icon === '04d'){
+       currentIcon.classList.add('fa-cloud-sun')
+      } else if (cityInfoCurrent.weather[0].icon === '01d'){
+       currentIcon.classList.add('fa-sun')
+      } else if (cityInfoCurrent.weather[0].icon === '01n'){
+       currentIcon.classList.add('fa-sun')
+      } else if (cityInfoCurrent.weather[0].icon === '50d'){
+       currentIcon.classList.add('fa-smog')
+      } else if (cityInfoCurrent.weather[0].icon === '13d'){
+       currentIcon.classList.add('fa-snowflake')
+      } else if (cityInfoCurrent.weather[0].icon === '11d'){
+       currentIcon.classList.add('fa-cloud-rain')
+      } else if (cityInfoCurrent.weather[0].icon === '10d'){
+       currentIcon.classList.add('fa-cloud-rain')
+      } else if (cityInfoCurrent.weather[0].icon === '09d'){
+       currentIcon.classList.add('fa-cloud-rain')
+      }
+
 }
 
 function printResults (cityLookUpUV){
-//     <div class="day-forecast card text-white bg-primary m-2" data-day ='0'>
-    //     <div class="card-header">Date</div>
-    //     <div class="card-body">
-    //         <i class="far fa-2x"></i>
-    //         <p class="card-text">Temperature</p>
-    //         <p class="card-text">Humidity</p>
-    //     </div>
-//      </div>
-    
+
     dataDay.each(function(){
-          var keyPair = $(this).data('day')
-          console.log(keyPair)
+          var keyPair = $(this).data('day')  
           var valuePair = cityLookUpUV.daily[keyPair]
-          console.log(valuePair)
+          var dayDate = $('.day-dat')
           var dayTemp = $('.day-temp')
+          var dayHum =$('.day-hum')
+          
           if (valuePair){
-              $(this).children(dayTemp).text(valuePair.temp.day)
+              var dateTime = moment.unix(valuePair.dt)
+              var tempthen = Math.ceil(valuePair.temp.day)
+              var dayFore = $('.localfore')
+              $(this).find(dayDate).text(moment(dateTime).format("MM-DD-YYYY") )
+              $(this).find(dayTemp).text(tempthen)
+              $(this).find(dayHum).text(valuePair.humidity)
+              if (valuePair.weather[0].icon === '02d'){
+                $(this).find(dayFore).addClass('fa-cloud-sun')
+              } else if (valuePair.weather[0].icon === '04d'){
+                $(this).find(dayFore).addClass('fa-cloud-sun')
+              } else if (valuePair.weather[0].icon === '01d'){
+                $(this).find(dayFore).addClass('fa-sun')
+              } else if (valuePair.weather[0].icon === '50d'){
+                $(this).find(dayFore).addClass('fa-smog')
+              } else if (valuePair.weather[0].icon === '13d'){
+                $(this).find(dayFore).addClass('fa-snowflake')
+              } else if (valuePair.weather[0].icon === '11d'){
+                $(this).find(dayFore).addClass('fa-cloud-rain')
+              } else if (valuePair.weather[0].icon === '10d'){
+                $(this).find(dayFore).addClass('fa-cloud-rain')
+              } else if (valuePair.weather[0].icon === '09d'){
+                $(this).find(dayFore).addClass('fa-cloud-rain')
+              }
           }
     })
   
@@ -123,6 +126,7 @@ function queryInputBtn(e){
 
 // Fetch for the current data and for the Lat and Lon 
 function apiSearchCurrent(cityInput){
+    cityPrint.classList.remove('hide')
     var cityLookUpCurrent = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityInput + '&units=imperial&appid=0f9afbf13ed5dbd1109884bf6550b637'
 
     fetch(cityLookUpCurrent)
@@ -135,13 +139,12 @@ function apiSearchCurrent(cityInput){
             return response.json();
         })
         .then(function (cityInfoCurrent){
-            console.log(cityInfoCurrent)
             printResultsCCurrent(cityInfoCurrent);              
         })
 
 }  
 
-// Fetch for the UV index excluding the extra data to reduce load 
+// Fetch for the UV index and the forecast Data
 function fetchForecastUV (latEl, lonEl){
     var cityLookUpUV = 'https://api.openweathermap.org/data/2.5/onecall?lat=' + latEl + '&lon=' + lonEl +'&exclude=hourly,alerts&units=imperial&appid=0f9afbf13ed5dbd1109884bf6550b637'
 
@@ -155,8 +158,21 @@ function fetchForecastUV (latEl, lonEl){
         return response.json();
     })
     .then(function (cityLookUpUV){
-        console.log(cityLookUpUV)
-        uvEl.textContent = cityLookUpUV.current.uvi  
+        var uvBackEL = cityLookUpUV.current.uvi 
+        uvEl.textContent = cityLookUpUV.current.uvi 
+        if (uvBackEL > 11){
+            uvEl.style.backgroundColor = 'purple';
+        } else if (uvBackEL > 8 ){
+            uvEl.style.backgroundColor = 'red';
+        } else if (uvBackEL > 6 ){
+            uvEl.style.backgroundColor = 'orange';
+        }else if (uvBackEL > 3 ){
+            uvEl.style.backgroundColor = 'yellow';
+        } else if (uvBackEL > 0){
+            uvEl.style.backgroundColor = 'green';
+        } else {
+            uvEl.style.backgroundColor = 'black';
+        }
         printResults(cityLookUpUV);
         }
     )
@@ -205,7 +221,6 @@ function freshLoad(){
             button.classList.add('saved-btn')
             searchHistory.appendChild(button) 
             button.innerText = btnName
-            console.log(savedCities)
             button.setAttribute('value',btnName)
         }
     }

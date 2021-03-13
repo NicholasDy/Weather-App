@@ -12,4 +12,10 @@
     display:none;
 }
 
+.search-history{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 /* creating classes for the different weather types */

@@ -24,14 +24,14 @@
             </div>
             <div class="h-85 p-2">
                 <h5>Recent Search History:</h5>
-                <ul class="search-history">
-                </ul>
+                <div class="search-history">
+                </div>
             </div>  
         </div>
-        <div class="city-info border border-dark w-100">
+        <div class="city-info border border-dark w-100 hide">
             <!-- will need to add the hide class to this after the code has been finished on the javascript -->
             <div class="city-info">
-                <h2><span class="city-name"></span> - - <span class="current-date"></span></h2>
+                <h2><span class="city-name"></span> - - <span class="current-date"></span> -- <i class="current-icon fas fa-2x"></i></h2>
                 <ul>
                     <p>Temperature: <span class="temp"></span>°F</p>
                     <p>Humidity: <span class="hum"></span>%</p>
@@ -40,57 +40,50 @@
                 </ul>
             </div>
             <h3 class="m-3">5-Day Forecast</h3>
-            <div class="forecast-field d-flex justify-content-between p-2 ">
+            <div class="forecast-field d-flex justify-content-between p-2">
                 
-                <div class="day-forecast card text-white bg-primary m-2" data-day ='0'>
-                    <div class="card-header">Date</div>
-                    <div class="card-body">
-                        <i class="far fa-2x"></i>
-                        <p class="card-text">Temperature <span class="test1"></span></p>
-                        <p class="card-text">Humidity</p>
-                    </div>
-                </div>            
-            
-            
                 <div class="day-forecast card text-white bg-primary m-2" data-day ='1'>
-                    <div class="card-header">Date: <span class="day-input"></span></div>
+                    <div class="card-header">Date: <span class="day-dat"></span></div>
                     <div class="card-body">
-                        <i class="far fa-2x"></i>
-                    <p class="card-text">Temperature: <span class="day-temp"></span></p>
-                    <p class="card-text">Humidity: <span class="day-hum"></span></p>
+                        <i class="fas fa-2x localfore"></i>
+                        <p class="card-text test1">Temperature: <span class="day-temp"></span></p>
+                        <p class="card-text">Humidity: <span class="day-hum"></span>%</p>
                     </div>
                 </div>            
-            
-    
                 <div class="day-forecast card text-white bg-primary m-2" data-day ='2'>
-                    <div class="card-header">Date</div>
+                    <div class="card-header">Date: <span class="day-dat"></span></div>
                     <div class="card-body">
-                        <i class="far fa-2x"></i>
-                    <p class="card-text">Temperature<span class="day-temp"></span></p>
-                    <p class="card-text">Humidity</p>
+                        <i class="fas fa-2x localfore"></i>
+                        <p class="card-text test1">Temperature: <span class="day-temp"></span></p>
+                        <p class="card-text">Humidity: <span class="day-hum"></span>%</p>
                     </div>
                 </div>            
-            
-                <div class="card text-white bg-primary m-2" data-day ='3'>
-                    <div class="card-header">Date</div>
+                <div class="day-forecast card text-white bg-primary m-2" data-day ='3'>
+                    <div class="card-header">Date: <span class="day-dat"></span></div>
                     <div class="card-body">
-                        <i class="far fa-2x"></i>
-                    <p class="card-text">Temperature</p>
-                    <p class="card-text">Humidity</p>
+                        <i class="fas fa-2x localfore"></i>
+                        <p class="card-text test1">Temperature: <span class="day-temp"></span></p>
+                        <p class="card-text">Humidity: <span class="day-hum"></span>%</p>
                     </div>
                 </div>            
-            
-                <div class="card text-white bg-primary m-2" data-day ='4'>
-                    <div class="card-header">Date</div>
+                <div class="day-forecast card text-white bg-primary m-2" data-day ='4'>
+                    <div class="card-header">Date: <span class="day-dat"></span></div>
                     <div class="card-body">
-                        <i class="far fa-2x"></i>
-                    <p class="card-text">Temperature</p>
-                    <p class="card-text">Humidity</p>
+                        <i class="fas fa-2x localfore"></i>
+                        <p class="card-text test1">Temperature: <span class="day-temp"></span></p>
+                        <p class="card-text">Humidity: <span class="day-hum"></span>%</p>
                     </div>
                 </div>            
-               
-            </div>    
-            
+                <div class="day-forecast card text-white bg-primary m-2" data-day ='5'>
+                    <div class="card-header">Date: <span class="day-dat"></span></div>
+                    <div class="card-body">
+                        <i class="fas fa-2x localfore"></i>
+                        <p class="card-text test1">Temperature: <span class="day-temp"></span></p>
+                        <p class="card-text">Humidity: <span class="day-hum"></span>%</p>
+                    </div>
+                </div>            
+                        
+            </div>                
         </div>
     </div>
 </body>
